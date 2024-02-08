@@ -640,6 +640,13 @@ const astecData = [
     web: 'https://www.nuernberg.de/internet/stadtbibliothek/',
     domain: 'bib-nuernberg.genios.de',
     permissions: ['https://online-service2.nuernberg.de/*']
+  },
+  {
+    id: 'www.muenchner-stadtbibliothek.de',
+    name: 'Stadtbibliothek München',
+    web: 'https://www.muenchner-stadtbibliothek.de/',
+    domain: 'bib-muenchen.genios.de',
+    permissions: ['https://ssl.muenchen.de/*']
   }
 ]
 
