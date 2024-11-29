@@ -97,6 +97,7 @@ export interface PartialSite {
   dateRange?: DateRange
   testSetup?: (page: PlaywrightPage) => Promise<void>
   examples?: TestExample[]
+  getDocumentId?: () => string | null
 }
 
 export interface Site extends PartialSite {

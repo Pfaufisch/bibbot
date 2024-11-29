@@ -162,14 +162,24 @@ class Extractor implements ExtractorInterface {
   extractArticleInfo(): ArticleInfo {
     const articleInfoSelectors = ['query', 'edition', 'date']
     const articleInfo: RawArticleInfo = {}
-    for (const key of articleInfoSelectors) {
-      if (this.site.selectors[key]) {
-        const selector = this.site.selectors[key]
-        let result = this.runSelectorQuery(selector)
-        if (result instanceof window.HTMLElement) {
-          result = result.innerText
+
+    if (this.site.getDocumentId) {
+      const documentId = this.site.getDocumentId()
+      if (documentId) {
+        articleInfo.query = documentId
+      }
+    }
+
+    if (!articleInfo.query) {
+      for (const key of articleInfoSelectors) {
+        if (this.site.selectors[key]) {
+          const selector = this.site.selectors[key]
+          let result = this.runSelectorQuery(selector)
+          if (result instanceof window.HTMLElement) {
+            result = result.innerText
+          }
+          articleInfo[key] = result
         }
-        articleInfo[key] = result
       }
     }
     return {
