@@ -643,6 +643,13 @@ const sites: Sites = {
             '"auf die meistbesuchten Sites eine Übersicht der wichtigsten News eine To-do-Liste der Kalender"',
         },
       },
+      {
+        url: 'https://www.heise.de/select/mac-and-i/2024/7/2409908264603741326',
+        selectors: {
+          query:
+            '"Intelligenz ahmt menschliche Intelligenz nach um etwa beim Erstellen von Texten und Bildern"',
+        },
+      },
     ],
     selectors: {
       query: makeQueryFunc([
@@ -664,6 +671,8 @@ const sites: Sites = {
         'Heise online',
         "c't - magazin für computertechnik (CT)",
         "c't Digitale Fotografie",
+        'Mac & I',
+        'iX - Magazin für professionelle Informationstechnik',
       ],
     },
     waitOnLoad: 2000,
@@ -882,12 +891,11 @@ const sites: Sites = {
   },
   'www.stimme.de': {
     testSetup: async (page) => {
-      await page
-        .locator('#cmpwrapper')
-        .evaluate((node) => {
-          const el: HTMLAnchorElement = node.shadowRoot.querySelector('#cmpwelcomebtnyes')
-          el.click()
-        })
+      await page.locator('#cmpwrapper').evaluate((node) => {
+        const el: HTMLAnchorElement =
+          node.shadowRoot.querySelector('#cmpwelcomebtnyes')
+        el.click()
+      })
     },
     examples: [
       {
@@ -1365,28 +1373,40 @@ const sites: Sites = {
     },
   },
   'www.stern.de': {
+    testSetup: consentShadowRoot({}),
+    examples: [
+      {
+        url: 'https://www.stern.de/hochzeitsplanung--was-ich-gerne-gewusst-haette--bevor-ich-heirate-35439596.html',
+        selectors: {
+          query:
+            '"beim Arzt und betrachte mich in der Selfiekamera Meine Lippe ist einseitig geschwollen"',
+        },
+      },
+    ],
     selectors: {
-      query: makeQueryFunc('.article__body p'),
+      query: makeQueryFunc([
+        '.article__body p.is-initial',
+        '.intro.u-richtext',
+      ]),
       headline: 'h2 .title__headline',
       date: 'time',
-      paywall:
-        'html:not(.has-paid-access):not(.has-full-access) .title__logo--str_plus',
+      paywall: '.article__body .paid-barrier',
       main: '.article__body',
     },
-    insertContent: (siteBot, main, content) => {
-      siteBot.hideBot()
-      let textClass
-      main.querySelectorAll(':scope>p').forEach((p) => {
-        textClass = p.className
-        p.remove()
-      })
-      content = content.replace(/<p>/g, `<p class="${textClass}">`)
-      main.innerHTML = main.innerHTML + content
-    },
+    dateRange: [50, 2],
     source: 'genios.de',
     sourceParams: {
-      dbShortcut: 'STER,STGL',
-      sourceNames: ['Stern', 'STERN Gesund leben'],
+      dbShortcut: 'STER,STGL,GEO,GEOS,GEOW,GESP,GEOE,CAPI',
+      sourceNames: [
+        'Stern',
+        'STERN Gesund leben',
+        'GEO',
+        'GEO Saison',
+        'GEO Wissen',
+        'GEO Special',
+        'GEO SAISON Extra',
+        'Capital',
+      ],
     },
   },
   'www.mittelbayerische.de': {
